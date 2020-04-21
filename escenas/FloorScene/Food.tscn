@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://sprite/Scavengers_SpriteSheet.png" type="Texture" id=1]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 15.9082, 15.8257 )
+
+[node name="Food" type="Sprite" groups=[
+"Food",
+]]
+z_index = 1
+texture = ExtResource( 1 )
+vframes = 7
+hframes = 8
+frame = 19
+
+[node name="Area2DFood" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2DFood"]
+shape = SubResource( 1 )

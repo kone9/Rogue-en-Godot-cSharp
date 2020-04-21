@@ -1,0 +1,5 @@
+/home/ariel/Documentos/Godot engine proyectos/GODOT C# PROYECTOS/Rogue en Godot/.mono/temp/bin/Debug/Rogue en Godot.dll
+/home/ariel/Documentos/Godot engine proyectos/GODOT C# PROYECTOS/Rogue en Godot/.mono/temp/bin/Debug/Rogue en Godot.pdb
+/home/ariel/Documentos/Godot engine proyectos/GODOT C# PROYECTOS/Rogue en Godot/.mono/temp/obj/Debug/Rogue en Godot.csprojAssemblyReference.cache
+/home/ariel/Documentos/Godot engine proyectos/GODOT C# PROYECTOS/Rogue en Godot/.mono/temp/obj/Debug/Rogue en Godot.dll
+/home/ariel/Documentos/Godot engine proyectos/GODOT C# PROYECTOS/Rogue en Godot/.mono/temp/obj/Debug/Rogue en Godot.pdb

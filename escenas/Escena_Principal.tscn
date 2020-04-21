@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://escenas/GameManager.tscn" type="PackedScene" id=27]
+[ext_resource path="res://codigos/Escena_Principal.cs" type="Script" id=28]
+
+[node name="Escena_Principal" type="Node2D" groups=[
+"Escena_Principal",
+]]
+script = ExtResource( 28 )
+GameManager = ExtResource( 27 )
+
+[node name="camara" type="Node2D" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="camara"]
+position = Vector2( 0.773804, 0 )
+offset = Vector2( 120, 112 )
+current = true
+zoom = Vector2( 0.54, 0.54 )
+
+[node name="Board" type="Node2D" parent="." groups=[
+"Board",
+]]

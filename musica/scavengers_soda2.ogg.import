@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/scavengers_soda2.ogg-ae322ce00ae7133846e505a65507de89.oggstr"
+
+[deps]
+
+source_file="res://musica/scavengers_soda2.ogg"
+dest_files=[ "res://.import/scavengers_soda2.ogg-ae322ce00ae7133846e505a65507de89.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

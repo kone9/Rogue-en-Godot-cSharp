@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/scavengers_fruit2.ogg-67a643fb9527e5e3a036e3b586fca172.oggstr"
+
+[deps]
+
+source_file="res://musica/scavengers_fruit2.ogg"
+dest_files=[ "res://.import/scavengers_fruit2.ogg-67a643fb9527e5e3a036e3b586fca172.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://sprite/Scavengers_SpriteSheet.png" type="Texture" id=1]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 15.9082, 15.8257 )
+
+[node name="Wall8" type="Sprite" groups=[
+"BlockingLayer",
+]]
+z_index = 1
+texture = ExtResource( 1 )
+vframes = 7
+hframes = 8
+frame = 31
+
+[node name="StaticBody2DWall" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2DWall"]
+shape = SubResource( 1 )

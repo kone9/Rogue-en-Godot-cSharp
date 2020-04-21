@@ -1,0 +1,81 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://sprite/Scavengers_SpriteSheet.png" type="Texture" id=1]
+
+[sub_resource type="RectangleShape2D" id=8]
+extents = Vector2( 13.1248, 13.6713 )
+
+[sub_resource type="Animation" id=14]
+resource_name = "Enemy2Attack"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("SpritePlayer:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 44, 45 ]
+}
+
+[sub_resource type="Animation" id=13]
+resource_name = "Enemy2Idle"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("SpritePlayer:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 12, 13, 14, 15, 16, 17 ]
+}
+
+[sub_resource type="AnimationNodeAnimation" id=15]
+animation = "Enemy2Idle"
+
+[sub_resource type="AnimationNodeAnimation" id=16]
+animation = "Enemy2Attack"
+
+[sub_resource type="AnimationNodeOneShot" id=17]
+
+[sub_resource type="AnimationNodeBlendTree" id=5]
+graph_offset = Vector2( -21, 179.5 )
+nodes/Animation/node = SubResource( 16 )
+nodes/Animation/position = Vector2( 100, 340 )
+"nodes/Animation 2/node" = SubResource( 15 )
+"nodes/Animation 2/position" = Vector2( 100, 200 )
+nodes/OneShot/node = SubResource( 17 )
+nodes/OneShot/position = Vector2( 380, 200 )
+nodes/output/position = Vector2( 640, 240 )
+node_connections = [ "output", 0, "OneShot", "OneShot", 0, "Animation 2", "OneShot", 1, "Animation" ]
+
+[node name="Enemy2" type="KinematicBody2D" groups=[
+"Enemy",
+]]
+z_index = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 8 )
+
+[node name="SpritePlayer" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+vframes = 7
+hframes = 8
+frame = 16
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/Enemy2Attack = SubResource( 14 )
+anims/Enemy2Idle = SubResource( 13 )
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 5 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/OneShot/active = false
