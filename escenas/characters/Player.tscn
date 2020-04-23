@@ -2,10 +2,10 @@
 
 [ext_resource path="res://sprite/Scavengers_SpriteSheet.png" type="Texture" id=1]
 
-[sub_resource type="RectangleShape2D" id=12]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 10.7465, 13.6713 )
 
-[sub_resource type="Animation" id=13]
+[sub_resource type="Animation" id=2]
 length = 0.3
 tracks/0/type = "value"
 tracks/0/path = NodePath("SpritePlayer:frame")
@@ -20,7 +20,7 @@ tracks/0/keys = {
 "values": [ 40, 41 ]
 }
 
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=3]
 length = 0.3
 loop = true
 tracks/0/type = "value"
@@ -36,7 +36,7 @@ tracks/0/keys = {
 "values": [ 46, 47 ]
 }
 
-[sub_resource type="Animation" id=15]
+[sub_resource type="Animation" id=4]
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("SpritePlayer:frame")
@@ -51,28 +51,28 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 3, 5 ]
 }
 
-[sub_resource type="AnimationNodeAdd2" id=11]
-
-[sub_resource type="AnimationNodeAnimation" id=5]
-animation = "PlayerChop"
+[sub_resource type="AnimationNodeAdd2" id=5]
 
 [sub_resource type="AnimationNodeAnimation" id=6]
-animation = "PlayerHit"
+animation = "PlayerChop"
 
 [sub_resource type="AnimationNodeAnimation" id=7]
+animation = "PlayerHit"
+
+[sub_resource type="AnimationNodeAnimation" id=8]
 animation = "PlayerIdle"
 
 [sub_resource type="AnimationNodeOneShot" id=9]
 
 [sub_resource type="AnimationNodeBlendTree" id=10]
 graph_offset = Vector2( -126, 146.5 )
-nodes/AddHit/node = SubResource( 11 )
+nodes/AddHit/node = SubResource( 5 )
 nodes/AddHit/position = Vector2( 500, 260 )
-nodes/Animation/node = SubResource( 7 )
+nodes/Animation/node = SubResource( 8 )
 nodes/Animation/position = Vector2( 0, 140 )
-"nodes/Animation 2/node" = SubResource( 5 )
+"nodes/Animation 2/node" = SubResource( 6 )
 "nodes/Animation 2/position" = Vector2( 0, 280 )
-"nodes/Animation 3/node" = SubResource( 6 )
+"nodes/Animation 3/node" = SubResource( 7 )
 "nodes/Animation 3/position" = Vector2( 20, 420 )
 nodes/OneShotchop/node = SubResource( 9 )
 nodes/OneShotchop/position = Vector2( 240, 140 )
@@ -83,20 +83,20 @@ node_connections = [ "output", 0, "AddHit", "OneShotchop", 0, "Animation", "OneS
 "Player",
 ]]
 z_index = 2
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 12 )
+shape = SubResource( 1 )
 
 [node name="SpritePlayer" type="Sprite" parent="."]
 texture = ExtResource( 1 )
 vframes = 7
 hframes = 8
-frame = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/PlayerChop = SubResource( 13 )
-anims/PlayerHit = SubResource( 14 )
-anims/PlayerIdle = SubResource( 15 )
+anims/PlayerChop = SubResource( 2 )
+anims/PlayerHit = SubResource( 3 )
+anims/PlayerIdle = SubResource( 4 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource( 10 )
@@ -104,3 +104,9 @@ anim_player = NodePath("../AnimationPlayer")
 active = true
 parameters/AddHit/add_amount = 0.0
 parameters/OneShotchop/active = false
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+rotation = -1.5708
+collision_mask = 2
+
+[node name="Tween" type="Tween" parent="."]
