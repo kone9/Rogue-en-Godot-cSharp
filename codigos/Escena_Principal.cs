@@ -25,12 +25,12 @@ public class Escena_Principal : Node2D
             if(i.IsInsideTree())//si esta en la escena
             {
                 existeGameManager = true;//existe un game Manager
-                GD.Print("ya existe un gameManger");
+                //GD.Print("ya existe un gameManger");
             }
         }
         if(existeGameManager == false)//sino existe un game manager
         {
-            GD.Print("No existe un GameManger creo uno nuevo");
+            //GD.Print("No existe un GameManger creo uno nuevo");
             instanciarGameManager();//instancio el gameManager
         }
     }

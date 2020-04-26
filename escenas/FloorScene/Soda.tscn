@@ -13,7 +13,9 @@ vframes = 7
 hframes = 8
 frame = 18
 
-[node name="Area2DSoda" type="Area2D" parent="."]
+[node name="Area2DSoda" type="Area2D" parent="." groups=[
+"Soda",
+]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2DSoda"]
 shape = SubResource( 1 )

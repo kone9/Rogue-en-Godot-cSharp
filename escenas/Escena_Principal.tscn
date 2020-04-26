@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
+[ext_resource path="res://escenas/characters/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://escenas/GameManager.tscn" type="PackedScene" id=27]
 [ext_resource path="res://codigos/Escena_Principal.cs" type="Script" id=28]
 
@@ -20,3 +21,8 @@ zoom = Vector2( 0.54, 0.54 )
 [node name="Board" type="Node2D" parent="." groups=[
 "Board",
 ]]
+
+[node name="GameManager" parent="." instance=ExtResource( 27 )]
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 0, 224 )

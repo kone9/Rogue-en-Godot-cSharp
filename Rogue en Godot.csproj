@@ -57,6 +57,9 @@
     <Compile Include="codigos\Escena_Principal.cs" />
     <Compile Include="codigos\GameManager.cs" />
     <Compile Include="codigos\MovingObject.cs" />
+    <Compile Include="codigos\Player.cs" />
+    <Compile Include="codigos\SuelosScript\Suelo1.cs" />
+    <Compile Include="codigos\Wall.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

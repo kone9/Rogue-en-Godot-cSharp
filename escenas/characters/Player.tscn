@@ -1,12 +1,14 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://sprite/Scavengers_SpriteSheet.png" type="Texture" id=1]
+[ext_resource path="res://codigos/Player.cs" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 10.7465, 13.6713 )
 
 [sub_resource type="Animation" id=2]
 length = 0.3
+step = 0.05
 tracks/0/type = "value"
 tracks/0/path = NodePath("SpritePlayer:frame")
 tracks/0/interp = 1
@@ -22,7 +24,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id=3]
 length = 0.3
-loop = true
+step = 0.05
 tracks/0/type = "value"
 tracks/0/path = NodePath("SpritePlayer:frame")
 tracks/0/interp = 1
@@ -30,7 +32,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1 ),
+"times": PoolRealArray( 0, 0.15 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
 "values": [ 46, 47 ]
@@ -51,47 +53,60 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 3, 5 ]
 }
 
-[sub_resource type="AnimationNodeAdd2" id=5]
-
-[sub_resource type="AnimationNodeAnimation" id=6]
+[sub_resource type="AnimationNodeAnimation" id=5]
 animation = "PlayerChop"
 
-[sub_resource type="AnimationNodeAnimation" id=7]
+[sub_resource type="AnimationNodeAnimation" id=6]
 animation = "PlayerHit"
 
-[sub_resource type="AnimationNodeAnimation" id=8]
+[sub_resource type="AnimationNodeAnimation" id=7]
 animation = "PlayerIdle"
 
-[sub_resource type="AnimationNodeOneShot" id=9]
+[sub_resource type="AnimationNodeStateMachineTransition" id=8]
 
-[sub_resource type="AnimationNodeBlendTree" id=10]
-graph_offset = Vector2( -126, 146.5 )
-nodes/AddHit/node = SubResource( 5 )
-nodes/AddHit/position = Vector2( 500, 260 )
-nodes/Animation/node = SubResource( 8 )
-nodes/Animation/position = Vector2( 0, 140 )
-"nodes/Animation 2/node" = SubResource( 6 )
-"nodes/Animation 2/position" = Vector2( 0, 280 )
-"nodes/Animation 3/node" = SubResource( 7 )
-"nodes/Animation 3/position" = Vector2( 20, 420 )
-nodes/OneShotchop/node = SubResource( 9 )
-nodes/OneShotchop/position = Vector2( 240, 140 )
-nodes/output/position = Vector2( 740, 300 )
-node_connections = [ "output", 0, "AddHit", "OneShotchop", 0, "Animation", "OneShotchop", 1, "Animation 2", "AddHit", 0, "OneShotchop", "AddHit", 1, "Animation 3" ]
+[sub_resource type="AnimationNodeStateMachineTransition" id=9]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=10]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=11]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachine" id=12]
+states/PlayerChop/node = SubResource( 5 )
+states/PlayerChop/position = Vector2( 305.601, 200 )
+states/PlayerHit/node = SubResource( 6 )
+states/PlayerHit/position = Vector2( -99.3985, 200 )
+states/PlayerIdle/node = SubResource( 7 )
+states/PlayerIdle/position = Vector2( 116.601, 61 )
+transitions = [ "PlayerIdle", "PlayerChop", SubResource( 8 ), "PlayerChop", "PlayerIdle", SubResource( 9 ), "PlayerIdle", "PlayerHit", SubResource( 10 ), "PlayerHit", "PlayerIdle", SubResource( 11 ) ]
+graph_offset = Vector2( -280.399, 1 )
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=13]
 
 [node name="Player" type="KinematicBody2D" groups=[
 "Player",
+"characters",
 ]]
 z_index = 2
 collision_mask = 2
+script = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 1 )
 
 [node name="SpritePlayer" type="Sprite" parent="."]
 texture = ExtResource( 1 )
 vframes = 7
 hframes = 8
+frame = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/PlayerChop = SubResource( 2 )
@@ -99,14 +114,16 @@ anims/PlayerHit = SubResource( 3 )
 anims/PlayerIdle = SubResource( 4 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 10 )
+tree_root = SubResource( 12 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
-parameters/AddHit/add_amount = 0.0
-parameters/OneShotchop/active = false
+parameters/playback = SubResource( 13 )
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 rotation = -1.5708
-collision_mask = 2
+enabled = true
+cast_to = Vector2( 0, 32 )
+collision_mask = 3
 
 [node name="Tween" type="Tween" parent="."]
+[connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]

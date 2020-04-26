@@ -96,20 +96,22 @@ public class BoardManager : Node2D
     }
         
 
-    private void BoardSetup() //metodo para crear el escenario inciial
+    private async void BoardSetup() //metodo para crear el escenario inciial
     {
 
         //recorremos la X
         for(int x = -1; x < columns + 1; x++ )//si el area es 8x8 quiero tambien incluir en ese area el borde,entonces si la x primera es el cero en -1 iria el muro
         {
             //recorremos la y
+            await ToSignal(GetTree().CreateTimer(0.01f),"timeout");
             for(int y = -1; y < rows + 1; y++ )//lo mismo pasa en el eje y..Por eso empieza en -1
             {
-                
+                await ToSignal(GetTree().CreateTimer(0.01f),"timeout");
                 toInstantiate = GetRandomInArray(floorTiles);//devuelve un objeto instanciado de tipo sprite toma como parametro un array de packetscene
                 
                 if(x == -1 || y ==-1 || x == columns || y == rows )//si la posicion pertenece al borde
                 {
+                    //await ToSignal(GetTree().CreateTimer(1.0f),"timeout");
                     //referencio a un elemento aleatorio del borde
                     toInstantiate = GetRandomInArray(outerWallTiles);//devuelve un objeto isntanciado de tipo sprite toma como parametro un array de packetscene
                 }

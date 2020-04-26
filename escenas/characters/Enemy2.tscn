@@ -58,6 +58,7 @@ node_connections = [ "output", 0, "OneShot", "OneShot", 0, "Animation 2", "OneSh
 
 [node name="Enemy2" type="KinematicBody2D" groups=[
 "Enemy",
+"characters",
 ]]
 z_index = 2
 collision_mask = 2
@@ -69,7 +70,7 @@ shape = SubResource( 1 )
 texture = ExtResource( 1 )
 vframes = 7
 hframes = 8
-frame = 15
+frame = 14
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/Enemy2Attack = SubResource( 2 )
