@@ -1,12 +1,13 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://sprite/Scavengers_SpriteSheet.png" type="Texture" id=1]
+[ext_resource path="res://codigos/Enemy.cs" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 13.1248, 13.6713 )
 
-[sub_resource type="Animation" id=2]
-resource_name = "Enemy2Attack"
+[sub_resource type="Animation" id=9]
+resource_name = "EnemyAttack"
 length = 0.3
 tracks/0/type = "value"
 tracks/0/path = NodePath("SpritePlayer:frame")
@@ -21,8 +22,8 @@ tracks/0/keys = {
 "values": [ 44, 45 ]
 }
 
-[sub_resource type="Animation" id=3]
-resource_name = "Enemy2Idle"
+[sub_resource type="Animation" id=4]
+resource_name = "EnemyIdle"
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("SpritePlayer:frame")
@@ -37,24 +38,26 @@ tracks/0/keys = {
 "values": [ 12, 13, 14, 15, 16, 17 ]
 }
 
-[sub_resource type="AnimationNodeAnimation" id=4]
-animation = "Enemy2Idle"
+[sub_resource type="AnimationNodeAnimation" id=10]
+animation = "EnemyAttack"
 
-[sub_resource type="AnimationNodeAnimation" id=5]
-animation = "Enemy2Attack"
+[sub_resource type="AnimationNodeAnimation" id=11]
+animation = "EnemyIdle"
 
-[sub_resource type="AnimationNodeOneShot" id=6]
+[sub_resource type="AnimationNodeStateMachineTransition" id=12]
 
-[sub_resource type="AnimationNodeBlendTree" id=7]
-graph_offset = Vector2( -21, 179.5 )
-nodes/Animation/node = SubResource( 5 )
-nodes/Animation/position = Vector2( 100, 340 )
-"nodes/Animation 2/node" = SubResource( 4 )
-"nodes/Animation 2/position" = Vector2( 100, 200 )
-nodes/OneShot/node = SubResource( 6 )
-nodes/OneShot/position = Vector2( 380, 200 )
-nodes/output/position = Vector2( 640, 240 )
-node_connections = [ "output", 0, "OneShot", "OneShot", 0, "Animation 2", "OneShot", 1, "Animation" ]
+[sub_resource type="AnimationNodeStateMachineTransition" id=13]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachine" id=14]
+states/EnemyAttack/node = SubResource( 10 )
+states/EnemyAttack/position = Vector2( 383, 183 )
+states/EnemyIdle/node = SubResource( 11 )
+states/EnemyIdle/position = Vector2( 383, 68 )
+transitions = [ "EnemyIdle", "EnemyAttack", SubResource( 12 ), "EnemyAttack", "EnemyIdle", SubResource( 13 ) ]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=15]
 
 [node name="Enemy2" type="KinematicBody2D" groups=[
 "Enemy",
@@ -62,6 +65,8 @@ node_connections = [ "output", 0, "OneShot", "OneShot", 0, "Animation 2", "OneSh
 ]]
 z_index = 2
 collision_mask = 2
+script = ExtResource( 2 )
+playerDamage = 20
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
@@ -70,17 +75,21 @@ shape = SubResource( 1 )
 texture = ExtResource( 1 )
 vframes = 7
 hframes = 8
-frame = 14
+frame = 12
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/Enemy2Attack = SubResource( 2 )
-anims/Enemy2Idle = SubResource( 3 )
+anims/EnemyAttack = SubResource( 9 )
+anims/EnemyIdle = SubResource( 4 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 7 )
+tree_root = SubResource( 14 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
-parameters/OneShot/active = false
+parameters/playback = SubResource( 15 )
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
+enabled = true
+cast_to = Vector2( -32, 0 )
 collision_mask = 2
+
+[node name="Tween" type="Tween" parent="."]

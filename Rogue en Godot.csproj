@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="codigos\BoardManager.cs" />
+    <Compile Include="codigos\Enemy.cs" />
     <Compile Include="codigos\Escena_Principal.cs" />
     <Compile Include="codigos\GameManager.cs" />
     <Compile Include="codigos\MovingObject.cs" />

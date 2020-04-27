@@ -21,8 +21,8 @@ public class Player : MovingObject
     {
         movementSpeed = 1f / moveTime;//velocidad a la que se movera
         BoxCollider = GetNode<CollisionShape2D>("CollisionShape2D");
-        rayo = GetNode<RayCast2D>("RayCast2D");
-        moverConTween = GetNode<Tween>("Tween");
+        rayo = GetNode<RayCast2D>("RayCast2D");//referencia al raycast
+        moverConTween = GetNode<Tween>("Tween");//referencia al nodo tween
         //rb2D = thi;por ahora voy a evitarla
         animator = GetNode<AnimationTree>("AnimationTree");//referencia al animation three
         _GameManager = (GameManager)GetTree().GetNodesInGroup("GameManager")[0];
@@ -40,6 +40,11 @@ public class Player : MovingObject
         {
             _GameManager.GameOver();//llamo a la función Game Over,ojo esta función tiene que terminar el juego
         }
+    }
+
+    protected override Vector2 RaycastDirection(int xDir, int Ydir)//cuando el raycast es del player
+    {
+        return new Vector2(-Ydir,xDir);//invierto la posición y con esto funciona bien hacia adonde apunta el raycast
     }
 
     protected override void AttempMove(int xDir, int yDir)

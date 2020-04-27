@@ -33,7 +33,7 @@ public abstract class MovingObject : KinematicBody2D//esta es una clase global q
             "Position",//que propiedad quiero interpolar,osea la posición
             this.Position,//posición inicial
             end,//posicion final y multiplico por el tamaño del sprite,para esto tengo que hacer pruebas,pero creo que asi tendria que funcionar
-            0.3f,//tiempo para ir de una posición a otra
+            0.1f,//tiempo para ir de una posición a otra
             Tween.TransitionType.Linear,//tipo de interpolación es Tween.TRANS_LINEAR
             Tween.EaseType.InOut//como termina la transición  Tween.EASE_IN_OUT
             );
@@ -48,8 +48,9 @@ public abstract class MovingObject : KinematicBody2D//esta es una clase global q
         bool colisiono;//para saber cuando el raycast colisiona
         Vector2 start = Position;//posicion inicial
         Vector2 end = start + new Vector2(xDir,Ydir);//la posición de adonde queremos movernos suma de vectores (0,0) + (1,0) = (1,0)
-        hitRaycast.CastTo = new Vector2(-Ydir,xDir);//esto determina para adonde va apuntar el raycast
-        
+        //hitRaycast.CastTo = new Vector2(-Ydir,xDir);//esto determina para adonde va apuntar el raycast
+        hitRaycast.CastTo = RaycastDirection(xDir,Ydir);//esto determina para adonde va apuntar el raycast
+
         //hacemos una raycast entre el punto inicial y final
         //si hay un collider por donde pasa esa linea abremos encontrado ese objeto
         //BoxCollider.Visible = false; //desactivamos el boxcollider para que no choque con nosotros mismos en el resultado
@@ -77,6 +78,7 @@ public abstract class MovingObject : KinematicBody2D//esta es una clase global q
     //Esto es relacionado al movimiento y al tipo de obstaculo
     protected abstract void OnCantMoveStaticBody2D(StaticBody2D go); //aqui viene el comportamiento luego de no poder moverse,es un meotdoABstracto ya que se va a comportar de diferente manera según sea el personaje o elenemigo
     protected abstract void OnCantMoveRigidBody2D(KinematicBody2D go);
+    protected abstract Vector2 RaycastDirection(int xDir, int Ydir);//como el personaje y el enemigo tienen algunas diferencias tengo que procesar la direccioń del raycast en cada uno por separado
     protected virtual void AttempMove(int xDir,int yDir)//metodo para internar moverse esto recive por arametro cuanto en x y cuanto en y lo marcamos como abstracto ya que cada esto lo haremos en cada personaje
     {
         RayCast2D hit = rayo;//tomo la referencia del nodo que esta en la función ready
