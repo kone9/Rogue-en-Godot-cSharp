@@ -19,6 +19,10 @@ config/name="Rogue en Godot"
 run/main_scene="res://escenas/Escena_Principal.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+SingletonVariables="*res://codigos/SingletonVariables.cs"
+
 [display]
 
 window/size/always_on_top=true

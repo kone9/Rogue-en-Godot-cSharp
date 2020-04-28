@@ -12,6 +12,8 @@ public class Player : MovingObject
     private int food;//para llevar la cuenta de cuanta comida tiene
     private AnimationNodeStateMachinePlayback playback;//referencia al nodo animation tree con el parametro para acceder a los stados
 
+    private SingletonVariables _SingletonVariables;
+    private Label _FoodText;
     //private bool seMovio = false;
 
     Wall hitWall;//referencia a la pared que esta chocando
@@ -26,11 +28,17 @@ public class Player : MovingObject
         //rb2D = thi;por ahora voy a evitarla
         animator = GetNode<AnimationTree>("AnimationTree");//referencia al animation three
         _GameManager = (GameManager)GetTree().GetNodesInGroup("GameManager")[0];
-        food = _GameManager.playerFoodPoint;//la comida inicial del jugador busco desde el game manager
-    
+        
+        
+
         playback = (AnimationNodeStateMachinePlayback)GetNode<AnimationTree>("AnimationTree").Get("parameters/playback");//accedo al nodo animation three y a la propiedad de las maquinas de estado
         playback.Start("PlayerIdle");//animación inicial player estatico osea igle
         
+        _SingletonVariables = GetNode<SingletonVariables>("/root/SingletonVariables");//para acceder al singleton desde el player y cambiar el número del nivel y guardar el puntaje
+        
+        _FoodText = (Label)GetTree().GetNodesInGroup("FoodText")[0];//accedo al nodo label que muestra la comida en la pantalla
+        food = _SingletonVariables.food;//la comida inicial del jugador busco desde el game manager
+        _FoodText.Text = "food " + food;//comida del jugador
     }
 
 
@@ -50,6 +58,7 @@ public class Player : MovingObject
     protected override void AttempMove(int xDir, int yDir)
     {
         food --;//en cada paso dismunuje la comida
+        _FoodText.Text = "food " + food;//comida del jugador
         base.AttempMove(xDir,yDir);//ejecuto esta acción
         CheckIfGameOver();//siempre que se decrementa la comida verificamos si es game over
         _GameManager.playersTurn = false;//luego terminamos el turno del jugador
@@ -57,9 +66,9 @@ public class Player : MovingObject
 
     public override void _PhysicsProcess(float delta)
     {
-        if(!_GameManager.playersTurn)//si no es el turno del jugador
+        if(!_GameManager.playersTurn || _GameManager.doingSetup)//si no es el turno del jugador o se esta inciando la escena con el menu
         {
-            return;//dejamos de ejecutar
+            return;//dejamos de ejecutar y el personaje no se mueve
         }
   
         int horizontal = Convert.ToInt16((Input.GetActionStrength("d") - Input.GetActionStrength("a")) * dimensionSprite);//mover izquierda derecha
@@ -71,25 +80,13 @@ public class Player : MovingObject
         if(horizontal != 0 || vertical != 0 )///nos estamos moviendo
         {
             AttempMove(horizontal,vertical);//movemos el personaje
-            //if(!seMovio)//esto es para prueba
-            //{
-            //seMovio = true;
-            //
-            //}
-            //GD.Print(rayo.IsColliding());//esto es para prueba compruebo si el rayo colisiona    
-            // await ToSignal(GetTree().CreateTimer(0.1f),"timeout");//esto es para prueba
-            //seMovio = false;//esto es para prueba
         }
             
     }
-                
-            
-        
-
 
     protected override void OnCantMoveStaticBody2D(StaticBody2D pared)//si "NO" podemos movernos recibe el cuerpo estatico y es un una pared.Este es un metodo que se sobreescribe
     {
-        if(pared.IsInGroup("Wall"))
+        if(pared.IsInGroup("Wall"))//si esta en el grupo suelo
         {
             hitWall = (Wall)pared.GetParent();//con esto tendria que poder acceder al script que maneja ese piso para cambiar la figura al ser golpeado
         }
@@ -117,6 +114,7 @@ public class Player : MovingObject
     public void LoseFood(int loss)
     {
         food -= loss;//cantidad de comida que pierdo
+        _FoodText.Text = " - "+ loss +" food " + food;//comida del jugador que pierde al ser golpeado
         playback.Travel("PlayerHit");//activo animación daño
         CheckIfGameOver();//verifico sino todavia tengo comida osea sino es game over
     }
@@ -127,17 +125,23 @@ public class Player : MovingObject
         {
             enable = false;//el jugador no se puede mover
             //aqui tendria que venir una transcición al cambiar de pantalla
+            _SingletonVariables.level += 1;
+            _SingletonVariables.food = food;
             await ToSignal(GetTree().CreateTimer(1.0f),"timeout");//detengo por 1 segundo
             Restart();//reinicio el nivel,voy a tener que utilizar un singleton para guardar puntajes
         }
         if(_area.IsInGroup("Food"))
         {
             food += pointPerFood;//sumo el puntaje de la comida
+            _FoodText.Text = " + "+ pointPerFood +" food " + food;//comida del jugador
+            (_area.GetParent().GetChild(0) as Area2D).Monitoring = false;//para que el cuerpo deje de ser detectado,porque aunque desaparesca el sprite sigue estando la colisión del area detectando cuerpos
             (_area.GetParent() as Sprite).Visible = false;//hago invisible el nodo padre que contiene el sprite por lo tanto todos los hijos tendrian que ser inviisble
         }
         if(_area.IsInGroup("Soda"))
         {
             food += pointPerSOda;//sumo el puntaje de la soda
+            _FoodText.Text = " + "+ pointPerSOda +" food " + food;//comida del jugador
+            (_area.GetParent().GetChild(0) as Area2D).Monitoring = false;//para que el cuerpo deje de ser detectado,porque aunque desaparesca el sprite sigue estando la colisión del area detectando cuerpos
             (_area.GetParent() as Sprite).Visible = false;//hago invisible el nodo padre que contiene el sprite por lo tanto todos los hijos tendrian que ser inviisble
         }
     }
