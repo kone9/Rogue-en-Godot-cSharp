@@ -8,6 +8,7 @@ extents = Vector2( 15.9082, 15.8257 )
 [node name="Soda" type="Sprite" groups=[
 "Soda",
 ]]
+z_index = 1
 texture = ExtResource( 1 )
 vframes = 7
 hframes = 8

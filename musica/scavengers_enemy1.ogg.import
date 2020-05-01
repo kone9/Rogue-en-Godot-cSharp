@@ -11,5 +11,5 @@ dest_files=[ "res://.import/scavengers_enemy1.ogg-90c2b54c814fdf74d3f6510c38cc5a
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0

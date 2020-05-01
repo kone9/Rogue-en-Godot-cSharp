@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using System;
 
 public class Enemy : MovingObject
@@ -11,18 +12,28 @@ public class Enemy : MovingObject
     private bool skinMove;//como es por turnos esta variable es para saber cuando puede moverse
     private AnimationNodeStateMachinePlayback playback;//referencia al animator
 
+    private Array<AudioStreamOGGVorbis> scavengers_enemy = new Array<AudioStreamOGGVorbis>();//cargo en este arreglo el recurso de audio enemigo,nota importante el arreglo de Godot es un Generico
+    private AudioStreamPlayer scavengersEnemyNode;//referencia al nodo
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        //para procesar el game manager
         _GameManager = (GameManager)GetTree().GetNodesInGroup("GameManager")[0];//para poder acceder al GameManager
         _GameManager.AddEnemyToList(this);//tendria que agregarse este mismo objeto kinematico2D
 
+        
+        //para procesar el enemigo
         movementSpeed = 1f / moveTime;//velocidad a la que se movera
         rayo = GetNode<RayCast2D>("RayCast2D");//referencia al raycast
         moverConTween = GetNode<Tween>("Tween");//referencia al nodo tween
         targetCharacter = (KinematicBody2D)GetTree().GetNodesInGroup("Player")[0];//referencia al nodo del personaje
         playback = (AnimationNodeStateMachinePlayback)GetNode<AnimationTree>("AnimationTree").Get("parameters/playback");//accedo al nodo animation three y a la propiedad de las maquinas de estado
         playback.Start("EnemyIdle");//como inicia la animación del personaje
+        
+        //para procesar el audio
+        scavengersEnemyNode = (AudioStreamPlayer)GetTree().GetNodesInGroup("scavengers_enemy")[0];//busco el nodo que controla el audio
+        scavengers_enemy.Add((AudioStreamOGGVorbis)GD.Load("res://musica/scavengers_enemy1.ogg"));//agrego el recurso de sonido
+        scavengers_enemy.Add((AudioStreamOGGVorbis)GD.Load("res://musica/scavengers_enemy2.ogg"));//agrego el recurso de sonido
     }
 
     public override void _Process(float delta)
@@ -30,16 +41,17 @@ public class Enemy : MovingObject
         targetPosition = targetCharacter.Position;//guardo la posición del personaje en targetPosition
     }
 
-    protected override void AttempMove(int xDir, int yDir)
+    protected override bool AttempMove(int xDir, int yDir)//este metodo devuelve si se movio o no "Bool"
     {
         
         if(skinMove)//si se movio
         {
             skinMove = false;//desactivo el movimiento
-            return;//salgo de esta función
+            return false;//retorna falso,el enemigo no se a movido
         }
-        base.AttempMove(xDir,yDir);//la segunda ves sera falso y se ejecutara el movimiento
+        bool canMove = base.AttempMove(xDir,yDir);//la segunda ves sera falso y se ejecutara el movimiento
         skinMove = true;//una ves hecho el movimiento otra ves sera verdadero
+        return canMove;//regresa si se movio o no
     }
 
     public void MoveEnemy()//metodo que se encarga de mover al personaje,esto es publico y lo hara el GameManager en una lista de enemigos
@@ -69,7 +81,7 @@ public class Enemy : MovingObject
     {
         
     }
-      
+    
     protected override Vector2 RaycastDirection(int xDir, int Ydir)//cuando el raycast es del enemigo
     {
         return new Vector2(xDir,Ydir);//devuelvo la posición normal y con esto funciona bien hacia adonde apunta el raycast
@@ -82,6 +94,7 @@ public class Enemy : MovingObject
         {
             hitPlayer.LoseFood(playerDamage);//descuento comida del personaje
             playback.Travel("EnemyAttack");//el enemigo ataca cuando le quitamos puntos al jugador
+            _GameManager.RandomizeSfx(scavengers_enemy,scavengersEnemyNode);//activo sonido golpe
         }
     }
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.

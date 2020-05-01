@@ -6,7 +6,7 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 12.8874, 13.6713 )
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=2]
 resource_name = "EnemyAttack"
 length = 0.3
 tracks/0/type = "value"
@@ -22,7 +22,7 @@ tracks/0/keys = {
 "values": [ 42, 43 ]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=3]
 resource_name = "EnemyIdle"
 loop = true
 tracks/0/type = "value"
@@ -38,33 +38,34 @@ tracks/0/keys = {
 "values": [ 6, 7, 8, 9, 10, 11 ]
 }
 
-[sub_resource type="AnimationNodeAnimation" id=8]
+[sub_resource type="AnimationNodeAnimation" id=4]
 animation = "EnemyAttack"
 
-[sub_resource type="AnimationNodeAnimation" id=9]
+[sub_resource type="AnimationNodeAnimation" id=5]
 animation = "EnemyIdle"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=10]
+[sub_resource type="AnimationNodeStateMachineTransition" id=6]
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=11]
+[sub_resource type="AnimationNodeStateMachineTransition" id=7]
 switch_mode = 2
 auto_advance = true
 
-[sub_resource type="AnimationNodeStateMachine" id=6]
-states/EnemyAttack/node = SubResource( 8 )
+[sub_resource type="AnimationNodeStateMachine" id=8]
+states/EnemyAttack/node = SubResource( 4 )
 states/EnemyAttack/position = Vector2( 407, 198 )
-states/EnemyIdle/node = SubResource( 9 )
+states/EnemyIdle/node = SubResource( 5 )
 states/EnemyIdle/position = Vector2( 407, 80 )
-transitions = [ "EnemyIdle", "EnemyAttack", SubResource( 10 ), "EnemyAttack", "EnemyIdle", SubResource( 11 ) ]
+transitions = [ "EnemyIdle", "EnemyAttack", SubResource( 6 ), "EnemyAttack", "EnemyIdle", SubResource( 7 ) ]
 graph_offset = Vector2( -9, 18.2934 )
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id=7]
+[sub_resource type="AnimationNodeStateMachinePlayback" id=9]
 
 [node name="Enemy1" type="KinematicBody2D" groups=[
 "Enemy",
 "characters",
 ]]
 z_index = 2
+collision_layer = 3
 collision_mask = 2
 script = ExtResource( 2 )
 
@@ -80,14 +81,14 @@ hframes = 8
 frame = 9
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/EnemyAttack = SubResource( 4 )
-anims/EnemyIdle = SubResource( 5 )
+anims/EnemyAttack = SubResource( 2 )
+anims/EnemyIdle = SubResource( 3 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 6 )
+tree_root = SubResource( 8 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
-parameters/playback = SubResource( 7 )
+parameters/playback = SubResource( 9 )
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 enabled = true

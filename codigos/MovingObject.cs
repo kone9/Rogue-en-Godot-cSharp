@@ -45,17 +45,15 @@ public abstract class MovingObject : KinematicBody2D//esta es una clase global q
     //metodo para mover al jugador o al enemigo devuelve 2 si se movio y la colisión de raycast
     protected bool Move(int xDir, int Ydir,RayCast2D hitRaycast)//es privada para cualquier otra clase que no hereda de esta
     {
+        Vector2 posicionAnteriorRayCast = hitRaycast.CastTo;
         bool colisiono;//para saber cuando el raycast colisiona
         Vector2 start = Position;//posicion inicial
         Vector2 end = start + new Vector2(xDir,Ydir);//la posición de adonde queremos movernos suma de vectores (0,0) + (1,0) = (1,0)
-        //hitRaycast.CastTo = new Vector2(-Ydir,xDir);//esto determina para adonde va apuntar el raycast
         hitRaycast.CastTo = RaycastDirection(xDir,Ydir);//esto determina para adonde va apuntar el raycast
 
         //hacemos una raycast entre el punto inicial y final
-        //si hay un collider por donde pasa esa linea abremos encontrado ese objeto
-        //BoxCollider.Visible = false; //desactivamos el boxcollider para que no choque con nosotros mismos en el resultado
+        //si hay un collider por donde pasa esa linea encontrado ese objeto
         colisiono = hitRaycast.IsColliding();//esto es para verificar si colisionamos tengo que verificar utilizando la colisión del raycast con un grupo
-        //BoxCollider.Visible = true;//una ves hecho el raycast lo volvemos a habilitar
         if(colisiono == false)//sino esta colisionando
         {
             //hacemos el movimiento
@@ -64,7 +62,6 @@ public abstract class MovingObject : KinematicBody2D//esta es una clase global q
             //GD.Print("cantidad que mueve en Y: ",Ydir);
             //GD.Print("la posicion en final X: ",end.x);
             //GD.Print("laposicion en final Y: ",end.y);
-
             SmoothMovementWithTween(end);//movemos con interpolación lineal recibe por parametro la ultima posición
             return true;
         }
@@ -73,28 +70,34 @@ public abstract class MovingObject : KinematicBody2D//esta es una clase global q
             GD.Print("No podemos movernos");
             return false;//no hemos podido movernos
         }
+
     }
 
     //Esto es relacionado al movimiento y al tipo de obstaculo
     protected abstract void OnCantMoveStaticBody2D(StaticBody2D go); //aqui viene el comportamiento luego de no poder moverse,es un meotdoABstracto ya que se va a comportar de diferente manera según sea el personaje o elenemigo
     protected abstract void OnCantMoveRigidBody2D(KinematicBody2D go);
     protected abstract Vector2 RaycastDirection(int xDir, int Ydir);//como el personaje y el enemigo tienen algunas diferencias tengo que procesar la direccioń del raycast en cada uno por separado
-    protected virtual void AttempMove(int xDir,int yDir)//metodo para internar moverse esto recive por arametro cuanto en x y cuanto en y lo marcamos como abstracto ya que cada esto lo haremos en cada personaje
+    
+    
+    protected virtual bool AttempMove(int xDir,int yDir)//metodo para internar moverse esto recibe por parametro cuanto en x y cuanto en y lo marcamos como abstracto ya que esto lo haremos en cada personaje
     {
         RayCast2D hit = rayo;//tomo la referencia del nodo que esta en la función ready
         bool canMove = Move(xDir,yDir,hit);//
-        if(canMove) return;//si se movio termino esta función
-        
-        Node col = (Node)hit.GetCollider();//usando la colisicioń del raycast busco el nodo
-        if(col.IsInGroup("Wall"))//si el nodo colisionado esta en el grupo wall
+        if(!canMove)//si no se movio
         {
-            //GD.Print("estoy conlisionado con un muro");
-            OnCantMoveStaticBody2D((StaticBody2D)hit.GetCollider());//aqui tengo que pasarle el staticbody que estamos colisionando
+            Node col = (Node)hit.GetCollider();//usando la colisicioń del raycast busco el nodo
+            if(col != null && col.IsInGroup("Wall"))//si el nodo colisionado esta en el grupo wall
+            {
+                //GD.Print("estoy conlisionado con un muro");
+                OnCantMoveStaticBody2D((StaticBody2D)hit.GetCollider());//aqui tengo que pasarle el staticbody que estamos colisionando
+            }
+            if(col != null && col.IsInGroup("characters"))//si el nodo colisionado esta enel grupo character
+            {
+                //GD.Print("estoy conlisionado con un personaje");
+                OnCantMoveRigidBody2D((KinematicBody2D)hit.GetCollider());//aqui tengo que pasarle el kinematicBody que estamos colisionando)
+            }
         }
-        if(col.IsInGroup("characters"))//si el nodo colisionado esta enel grupo character
-        {
-            //GD.Print("estoy conlisionado con un personaje");
-            OnCantMoveRigidBody2D((KinematicBody2D)hit.GetCollider());//aqui tengo que pasarle el kinematicBody que estamos colisionando)
-        }
+        return canMove;//devuelve verdadero o falso para saber si se movio o no
     }   
+       
 }

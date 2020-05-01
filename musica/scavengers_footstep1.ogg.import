@@ -11,5 +11,5 @@ dest_files=[ "res://.import/scavengers_footstep1.ogg-f550c0146a892007838f885281f
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0

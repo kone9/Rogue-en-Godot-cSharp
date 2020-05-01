@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://escenas/characters/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://escenas/ControlUI.tscn" type="PackedScene" id=2]
+[ext_resource path="res://musica/scavengers_music.wav" type="AudioStream" id=3]
+[ext_resource path="res://musica/scavengers_die.ogg" type="AudioStream" id=8]
 [ext_resource path="res://escenas/GameManager.tscn" type="PackedScene" id=27]
 [ext_resource path="res://codigos/Escena_Principal.cs" type="Script" id=28]
 
@@ -26,7 +28,6 @@ zoom = Vector2( 0.54, 0.54 )
 ]]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 0, 224 )
 
 [node name="TimerlevelStarDelay" type="Timer" parent="."]
 one_shot = true
@@ -35,4 +36,44 @@ autostart = true
 [node name="Canvas" type="CanvasLayer" parent="."]
 
 [node name="ControlUI" parent="Canvas" instance=ExtResource( 2 )]
+
+[node name="Audio_Y_Sfx" type="Node" parent="."]
+
+[node name="MusicGame" type="AudioStreamPlayer" parent="Audio_Y_Sfx" groups=[
+"MusicGame",
+]]
+stream = ExtResource( 3 )
+autoplay = true
+bus = "music"
+
+[node name="scavengers_footstep" type="AudioStreamPlayer" parent="Audio_Y_Sfx" groups=[
+"scavengers_footstep",
+]]
+bus = "scavengers_footstep"
+
+[node name="scavengers_fruit" type="AudioStreamPlayer" parent="Audio_Y_Sfx" groups=[
+"scavengers_fruit",
+]]
+bus = "scavengers_fruit"
+
+[node name="scavengers_soda" type="AudioStreamPlayer" parent="Audio_Y_Sfx" groups=[
+"scavengers_soda",
+]]
+bus = "scavengers_soda"
+
+[node name="scavengers_chop" type="AudioStreamPlayer" parent="Audio_Y_Sfx" groups=[
+"scavengers_chop",
+]]
+bus = "scavengers_chop"
+
+[node name="scavengers_die" type="AudioStreamPlayer" parent="Audio_Y_Sfx" groups=[
+"scavengers_die",
+]]
+stream = ExtResource( 8 )
+bus = "scavengers_die"
+
+[node name="scavengers_enemy" type="AudioStreamPlayer" parent="Audio_Y_Sfx" groups=[
+"scavengers_enemy",
+]]
+bus = "scavengers_enemy"
 [connection signal="timeout" from="TimerlevelStarDelay" to="GameManager" method="_on_TimerlevelStarDelay_timeout"]

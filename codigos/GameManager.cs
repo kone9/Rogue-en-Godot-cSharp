@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using System;
 using System.Collections.Generic;
 
@@ -67,11 +68,11 @@ public class GameManager : Node2D
 
     public void GameOver()//posiblemente esto despues voy a tener que correguirlo
     {
-        
         LevelText.Text = "After " + level + " Days\nyou starved";//si es game over cambio el texto
         fondoColorUI.Visible = true;//hago visible el fondo
         LevelText.Visible = true;//hace visible el texto   
         Visible = false;//desactivo el nodo que contiene este script,esto tendria que desactivar el Game manager para saber que es Game over puede que lo haga de otra manera
+        doingSetup = true;//si es Game over ya no puedo mover al jugador
     }
 
     private async void MoveEnemies()//esta función sera como una corrutina la utilizare para mover a los personajes cada cierto tiempo
@@ -108,7 +109,15 @@ public class GameManager : Node2D
         enemies.Add(enemy);//agrega el enemigo a la lista
     }
 
-
+    public void RandomizeSfx( Array<AudioStreamOGGVorbis> clips,AudioStreamPlayer SfxSource )//Función para ejecutar audio recibe el clip y el nodo
+    {
+        int randomIndex = (int)GD.RandRange(0,clips.Count);//devuelve un número aleatorio entre los 2 clips que recibio como parametro
+        float randomPitch = (float)GD.RandRange(0.9f,1.1f);//para cambiar la recuencía del sonido
+        SfxSource.PitchScale = randomPitch;//el sonido tiene una pequeña variación
+        SfxSource.Stream = clips[randomIndex];//aleatoriamente elijo una de las pistas de audio
+        SfxSource.Play();//doy play al sonido
+        
+    }
 
 
 }

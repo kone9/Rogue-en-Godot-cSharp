@@ -1,13 +1,20 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://sprite/Scavengers_SpriteSheet.png" type="Texture" id=1]
 [ext_resource path="res://codigos/Player.cs" type="Script" id=2]
+[ext_resource path="res://musica/scavengers_footstep2.ogg" type="AudioStream" id=3]
+[ext_resource path="res://musica/scavengers_soda2.ogg" type="AudioStream" id=4]
+[ext_resource path="res://musica/scavengers_footstep1.ogg" type="AudioStream" id=5]
+[ext_resource path="res://musica/scavengers_soda1.ogg" type="AudioStream" id=6]
+[ext_resource path="res://musica/scavengers_fruit1.ogg" type="AudioStream" id=7]
+[ext_resource path="res://musica/scavengers_fruit2.ogg" type="AudioStream" id=8]
+[ext_resource path="res://musica/scavengers_die.ogg" type="AudioStream" id=9]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 10.7465, 13.6713 )
 
 [sub_resource type="Animation" id=2]
-length = 0.3
+length = 0.2
 step = 0.05
 tracks/0/type = "value"
 tracks/0/path = NodePath("SpritePlayer:frame")
@@ -90,9 +97,15 @@ graph_offset = Vector2( -280.399, 1 )
 "Player",
 "characters",
 ]]
+position = Vector2( 0, 224 )
 z_index = 2
+collision_layer = 3
 collision_mask = 2
 script = ExtResource( 2 )
+scavengers_footstep = [ ExtResource( 5 ), ExtResource( 3 ) ]
+scavengers_fruit = [ ExtResource( 7 ), ExtResource( 8 ) ]
+scavengers_soda = [ ExtResource( 6 ), ExtResource( 4 ) ]
+scavengers_die = ExtResource( 9 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
@@ -106,7 +119,7 @@ shape = SubResource( 1 )
 texture = ExtResource( 1 )
 vframes = 7
 hframes = 8
-frame = 1
+frame = 41
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/PlayerChop = SubResource( 2 )
