@@ -41,6 +41,7 @@ public class Enemy : MovingObject
         targetPosition = targetCharacter.Position;//guardo la posición del personaje en targetPosition
     }
 
+
     protected override bool AttempMove(int xDir, int yDir)//este metodo devuelve si se movio o no "Bool"
     {
         

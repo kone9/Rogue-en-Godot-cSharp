@@ -40,6 +40,7 @@ public class Player : MovingObject
     
     Wall hitWall;//referencia a la pared que esta chocando
 
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -50,18 +51,12 @@ public class Player : MovingObject
         //rb2D = thi;por ahora voy a evitarla
         animator = GetNode<AnimationTree>("AnimationTree");//referencia al animation three
         _GameManager = (GameManager)GetTree().GetNodesInGroup("GameManager")[0];
-        
-        
-
         playback = (AnimationNodeStateMachinePlayback)GetNode<AnimationTree>("AnimationTree").Get("parameters/playback");//accedo al nodo animation three y a la propiedad de las maquinas de estado
         playback.Start("PlayerIdle");//animación inicial player estatico osea igle
-        
         _SingletonVariables = GetNode<SingletonVariables>("/root/SingletonVariables");//para acceder al singleton desde el player y cambiar el número del nivel y guardar el puntaje
-        
         _FoodText = (Label)GetTree().GetNodesInGroup("FoodText")[0];//accedo al nodo label que muestra la comida en la pantalla
         food = _SingletonVariables.food;//la comida inicial del jugador busco desde el game manager
         _FoodText.Text = "food " + food;//comida del jugador
-    
         //para procesar el audio y buscar los nodos
         scavengersFootstepNode = (AudioStreamPlayer)GetTree().GetNodesInGroup("scavengers_footstep")[0];
         scavengersFruitNode = (AudioStreamPlayer)GetTree().GetNodesInGroup("scavengers_fruit")[0];
@@ -100,8 +95,9 @@ public class Player : MovingObject
         return canMove;//regresa si se movio o no
     }
 
-    public override void _PhysicsProcess(float delta)
+    public override void _Input(InputEvent @event)
     {
+        //GD.Print(rayo.IsColliding());
         if(!_GameManager.playersTurn || _GameManager.doingSetup)//si no es el turno del jugador o se esta inciando la escena con el menu
         {
             return;//dejamos de ejecutar y el personaje no se mueve
@@ -109,15 +105,48 @@ public class Player : MovingObject
   
         int horizontal = Convert.ToInt16((Input.GetActionStrength("d") - Input.GetActionStrength("a")) * dimensionSprite);//mover izquierda derecha
         int vertical =  Convert.ToInt16((Input.GetActionStrength("s") - Input.GetActionStrength("w")) * dimensionSprite );//mover arriba abajo
+        
+        /*if(Input.IsActionJustPressed("a"))
+        {
+            horizontal = -32;
+        }
+
+        else if(Input.IsActionJustPressed("d"))
+        {
+            horizontal = 32;
+        }
+
+        else if(Input.IsActionJustPressed("s"))
+        {
+            vertical = 32;
+        }
+
+        else if(Input.IsActionJustPressed("w"))
+        {
+            vertical = -32;
+        }
+
+        else
+        {
+            horizontal =0;
+            vertical = 0;
+        }*/
+
+        //posicionDelRayo = RaycastDirection(horizontal,vertical);
         if(horizontal != 0)//esto es para que NO se mueva en diagonal
         {
             vertical = 0;//esto es para que NO se mueva en diagonal
         }
+            
         if(horizontal != 0 || vertical != 0 )///nos estamos moviendo
         {
+            //rayo.CastTo = RaycastDirection(horizontal,vertical);
             AttempMove(horizontal,vertical);//movemos el personaje
-        }     
+        }
+
+        
     }
+
 
     protected override void OnCantMoveStaticBody2D(StaticBody2D pared)//si "NO" podemos movernos recibe el cuerpo estatico y es un una pared.Este es un metodo que se sobreescribe
     {
@@ -143,11 +172,6 @@ public class Player : MovingObject
         }*/
     }
 
-        
-        
-        
-
-
     private void Restart()
     {
         GetTree().ReloadCurrentScene();//reinicia la scena esto puede cambiar
@@ -170,7 +194,7 @@ public class Player : MovingObject
             _GameManager.doingSetup = true;//Cuando entro al area exit ya no puedo mover el personaje
             _SingletonVariables.level += 1;//aumento el nivel desde el singleton
             _SingletonVariables.food = food;//guardo el valor de la comida en el singleton
-            await ToSignal(GetTree().CreateTimer(1.0f),"timeout");//detengo por 1 segundo
+            await ToSignal(GetTree().CreateTimer(0.5f),"timeout");//detengo por 1 segundo
             Restart();//reinicio el nivel,voy a tener que utilizar un singleton para guardar puntajes
         }
         if(_area.IsInGroup("Food"))
