@@ -13,6 +13,7 @@ public class Wall : Sprite
     //para procesar el sonido
     private Array<AudioStreamOGGVorbis> scavengers_chop = new Array<AudioStreamOGGVorbis>();//cargo en este arreglo el recurso de audio chop,nota importante el arreglo de Godot es un Generico
     private AudioStreamPlayer scavengersChopNode;//referencia al nodo
+    private AnimationPlayer _AnimationPlayer;//para buscar el animation player
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -22,6 +23,7 @@ public class Wall : Sprite
         scavengersChopNode = (AudioStreamPlayer)GetTree().GetNodesInGroup("scavengers_chop")[0];
         scavengers_chop.Add((AudioStreamOGGVorbis)GD.Load("res://musica/scavengers_chop1.ogg"));//guardo el audio precargado    
         scavengers_chop.Add((AudioStreamOGGVorbis)GD.Load("res://musica/scavengers_chop2.ogg"));//guardo el audio precargado    
+        _AnimationPlayer = GetNode<AnimationPlayer>("StaticBody2DWall/AnimationPlayer");//busco el animation player
     }
 
 
@@ -31,6 +33,7 @@ public class Wall : Sprite
         _GameManager.RandomizeSfx(scavengers_chop,scavengersChopNode);//activo sonido golpear
         Frame = indiceDmgSprite;//cuando es golpeado toma esta textura que esta en el indice DmgSprite
         hp -= loss;//descuento puntaje
+        _AnimationPlayer.Play("golpeWall");//activo la animación de movimiento
         if(hp<2)
         if(hp <= 0)//si el hp de esta columna es menor a cero
         {

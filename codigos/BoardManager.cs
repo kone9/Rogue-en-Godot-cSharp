@@ -9,7 +9,20 @@ public class BoardManager : Node2D
     public int columns = 8;//numero de columnas
     [Export]
     public int rows = 8;//numero de filas
+    [Export]
+    public int FoodQuantityMIN = 1;//cantidad mínima de comida en un escneario
+    [Export]
+    public int FoodQuantityMAX = 5;//cantidad máxima de comida en un escneario
+    [Export]
+    public int wallQuantityMIN = 5;//cantidad mínima de obstaculos en un escneario
+    [Export]
+    public int wallQuantityMAX = 9;//cantidad máxima de obstaculos en un escneario
+    //Esto es para contolar la dificultad,puede verse en una grafica como ira aumentando paulantinamente dependiendo cuanto lo multiplique esta variable
+    [Export]
+    public int controlDificulty = 1;//esta variable se usa para multiplicar la función logaritmica que instancia cantidad de objetos y de esta forma poder aumentar o bajar la cantidad de enemigos,osea manejar la dificultad
     
+
+
     [Export]
     private Godot.Collections.Array<PackedScene> floorTiles,outerWallTiles,wallTiles,foodTiles,EnemyTiles;//suelos empaquetados para precargar desde el editor
     [Export]
@@ -19,6 +32,7 @@ public class BoardManager : Node2D
     private Sprite toInstantiate;//referencia a los bloques del suelo que seran instanciados
 
     private Node2D board;//para poner todos los suelos instanciados
+
     
     public override void _Ready()
     {
@@ -85,28 +99,38 @@ public class BoardManager : Node2D
 
     public void SetupScene(int level)//esto crea los muros del borde y el suelo..Toma como parametro el nivel para determinar la cantidad de enemigos
     {
+        int enemyCount = 0;//inicializo el contador enemigos
         BoardSetup();//prepara la escena básica bordes de alrededor y suelo
         InitialiceList();//metemos en esta lista todas las pocisiones donde pueden aparecer objetos de forma aleatoria
-        LayoutObjectAtRandom(wallTiles,5,9);//cada ves que iniciamos la ejecución nos va a crear entre 5 y 9 muros
-        LayoutObjectAtRandom(foodTiles,1,5);//hamos lo mismo pero ahora agregamos la comida habra entre 1 y 5 objetos de comida
+        LayoutObjectAtRandom(wallTiles,wallQuantityMIN,wallQuantityMAX);//cada ves que iniciamos la ejecución nos va a crear entre 5 y 9 muros
+        LayoutObjectAtRandom(foodTiles,FoodQuantityMIN,FoodQuantityMAX);//hamos lo mismo pero ahora agregamos la comida habra entre 1 y 5 objetos de comida
         //int enemyCount = level / 2;//cantidad de enemigos en cada nivel.1.2.3.4.etc lo divido por 2 para que la cantidad sea menor y no tenga tanta dificiltad
-        int enemyCount = (int)Math.Log(level,2);//tambien se puede hacer que el incremento de la dificultad sea de forma logaritmica,supuestamente asi esta en el tutorial de unity aqui se usa en base 2
+        if(level == 1)//si es el nivel 1 no hay enemigos
+        {
+            enemyCount = (int)Math.Log(level,2);//tambien se puede hacer que el incremento de la dificultad sea de forma logaritmica,supuestamente asi esta en el tutorial de unity aqui se usa el logaritmo en "BASE 2" y en este caso es multiplicado por un factor de dificultad
+        }
+        else if(level == 2)//para que si la dificultad es 2 en el segundo nivel aparesca 1
+        {
+            enemyCount = (int)Math.Log((level - 1) * controlDificulty,2);//tambien se puede hacer que el incremento de la dificultad sea de forma logaritmica,supuestamente asi esta en el tutorial de unity aqui se usa el logaritmo en "BASE 2" y en este caso es multiplicado por un factor de dificultad
+        }
+        else//sino la cantidad de enemigos depende de que el nivel sea mayor a 1 y la dificultad
+        {
+            enemyCount = (int)Math.Log(level * controlDificulty,2);//tambien se puede hacer que el incremento de la dificultad sea de forma logaritmica,supuestamente asi esta en el tutorial de unity aqui se usa el logaritmo en "BASE 2" y en este caso es multiplicado por un factor de dificultad
+        }
         LayoutObjectAtRandomKinematicBody2D(EnemyTiles,enemyCount,enemyCount);//Esto crea la cantidad de enemigos dependiendo el nivel,siempre sera 1 número por eso en la aletatoriedad va el mismo número
         instanciarSalida();//ahora instanciamos el nodo que posee la salida,osea el sprite
     }
         
 
-    private async void BoardSetup() //metodo para crear el escenario inciial
+    private void BoardSetup() //metodo para crear el escenario inciial
     {
 
         //recorremos la X
         for(int x = -1; x < columns + 1; x++ )//si el area es 8x8 quiero tambien incluir en ese area el borde,entonces si la x primera es el cero en -1 iria el muro
         {
             //recorremos la y
-            await ToSignal(GetTree().CreateTimer(0.01f),"timeout");
             for(int y = -1; y < rows + 1; y++ )//lo mismo pasa en el eje y..Por eso empieza en -1
             {
-                await ToSignal(GetTree().CreateTimer(0.01f),"timeout");
                 toInstantiate = GetRandomInArray(floorTiles);//devuelve un objeto instanciado de tipo sprite toma como parametro un array de packetscene
                 
                 if(x == -1 || y ==-1 || x == columns || y == rows )//si la posicion pertenece al borde

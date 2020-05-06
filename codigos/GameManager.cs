@@ -22,6 +22,9 @@ public class GameManager : Node2D
     public bool doingSetup;//es para saber si todabia esta preparandose la escena,osea esta la UI que aparece en el comienzo
 
     private SingletonVariables _SingletonVariables;
+    Timer TimerReiniciarJuego;
+
+    Player _MovingObject;
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -32,6 +35,7 @@ public class GameManager : Node2D
         
         _SingletonVariables = GetNode<SingletonVariables>("/root/SingletonVariables");//para acceder al singleton desde el player y cambiar el número del nivel y guardar el puntaje
         level = _SingletonVariables.level;
+        TimerReiniciarJuego = (Timer)GetTree().GetNodesInGroup("TimerReiniciarJuego")[0];
 
         InitGame();//llamo al script que inicia el nivel lo hago desde escena principal
         
@@ -66,19 +70,24 @@ public class GameManager : Node2D
 
 
 
-    public void GameOver()//posiblemente esto despues voy a tener que correguirlo
+    public async void GameOver()//posiblemente esto despues voy a tener que correguirlo
     {
+        
+        //await ToSignal(GetTree().CreateTimer(0.5f), "timeout");//detengo por 1 segundo el flujo del código
         LevelText.Text = "After " + level + " Days\nyou starved";//si es game over cambio el texto
         fondoColorUI.Visible = true;//hago visible el fondo
         LevelText.Visible = true;//hace visible el texto   
         Visible = false;//desactivo el nodo que contiene este script,esto tendria que desactivar el Game manager para saber que es Game over puede que lo haga de otra manera
         doingSetup = true;//si es Game over ya no puedo mover al jugador
+        await ToSignal(GetTree().CreateTimer(3.0f), "timeout");//detengo por 1 segundo el flujo del código
+        LevelText.Text = "The game reload \nin 5 second";//cambio la frase
+        TimerReiniciarJuego.Start();//inicio el timer para reiniciar el juego
     }
 
     private async void MoveEnemies()//esta función sera como una corrutina la utilizare para mover a los personajes cada cierto tiempo
     {
         enemiesMoving = true;//el enemigo se puede mover
-        await ToSignal(GetTree().CreateTimer(turnDelay),"timeout");//creo un timer que espera el tiempo que tenemos en la variable turnDelay...Esto puede cambiar 
+        //await ToSignal(GetTree().CreateTimer(turnDelay),"timeout");//creo un timer que espera el tiempo que tenemos en la variable turnDelay...Esto puede cambiar 
         if(enemies.Count == 0)//sino hay enemigos
         {
             await ToSignal(GetTree().CreateTimer(turnDelay),"timeout");//esperara este tiempo antes que pueda volver a moverse
@@ -117,6 +126,13 @@ public class GameManager : Node2D
         SfxSource.Stream = clips[randomIndex];//aleatoriamente elijo una de las pistas de audio
         SfxSource.Play();//doy play al sonido
         
+    }
+    public void _on_TimerReiniciarJuego_timeout()
+    {
+
+        GetTree().ReloadCurrentScene();
+        _SingletonVariables.food = 100;//cambio los valores del singleton
+        _SingletonVariables.level = 1;//cambio los valores del singleton
     }
 
 

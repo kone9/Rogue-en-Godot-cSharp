@@ -2,30 +2,30 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Scavengers_SpriteSheet.png-453d28febfc58649b3861793faca8d61.stex"
+path="res://.import/golpeTextura.png-b65b8a77f934899b8a375d123244e5c7.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/Scavengers_SpriteSheet.png"
-dest_files=[ "res://.import/Scavengers_SpriteSheet.png-453d28febfc58649b3861793faca8d61.stex" ]
+source_file="res://sprite/golpeTextura.png"
+dest_files=[ "res://.import/golpeTextura.png-b65b8a77f934899b8a375d123244e5c7.stex" ]
 
 [params]
 
-compress/mode=3
+compress/mode=0
 compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
-flags/mipmaps=true
-flags/anisotropic=true
+flags/filter=true
+flags/mipmaps=false
+flags/anisotropic=false
 flags/srgb=2
 process/fix_alpha_border=true
-process/premult_alpha=true
+process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
 stream=false

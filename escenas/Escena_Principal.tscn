@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://escenas/characters/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://escenas/ControlUI.tscn" type="PackedScene" id=2]
@@ -6,6 +6,34 @@
 [ext_resource path="res://musica/scavengers_die.ogg" type="AudioStream" id=8]
 [ext_resource path="res://escenas/GameManager.tscn" type="PackedScene" id=27]
 [ext_resource path="res://codigos/Escena_Principal.cs" type="Script" id=28]
+
+[sub_resource type="Animation" id=1]
+resource_name = "pantallaRoja"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 0.027451, 0.027451, 0 ), Color( 1, 0.027451, 0.027451, 0.447059 ), Color( 1, 0.027451, 0.027451, 0 ), Color( 1, 0.027451, 0.027451, 0.203922 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../../../camara/Camera2D:zoom")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0.56, 0.53 ), Vector2( 0.54, 0.52 ), Vector2( 0.56, 0.53 ), Vector2( 0.54, 0.52 ), Vector2( 0.56, 0.53 ) ]
+}
 
 [node name="Escena_Principal" type="Node2D" groups=[
 "Escena_Principal",
@@ -19,9 +47,9 @@ GameManager = ExtResource( 27 )
 
 [node name="Camera2D" type="Camera2D" parent="camara"]
 position = Vector2( 0.773804, 0 )
-offset = Vector2( 120, 112 )
+offset = Vector2( 240, 112 )
 current = true
-zoom = Vector2( 0.54, 0.54 )
+zoom = Vector2( 0.56, 0.53 )
 
 [node name="Board" type="Node2D" parent="." groups=[
 "Board",
@@ -32,10 +60,6 @@ zoom = Vector2( 0.54, 0.54 )
 [node name="TimerlevelStarDelay" type="Timer" parent="."]
 one_shot = true
 autostart = true
-
-[node name="Canvas" type="CanvasLayer" parent="."]
-
-[node name="ControlUI" parent="Canvas" instance=ExtResource( 2 )]
 
 [node name="Audio_Y_Sfx" type="Node" parent="."]
 
@@ -76,4 +100,44 @@ bus = "scavengers_die"
 "scavengers_enemy",
 ]]
 bus = "scavengers_enemy"
+
+[node name="TimerReiniciarJuego" type="Timer" parent="." groups=[
+"TimerReiniciarJuego",
+]]
+wait_time = 5.0
+one_shot = true
+
+[node name="ViewportContainer" type="ViewportContainer" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Canvas" type="CanvasLayer" parent="ViewportContainer"]
+
+[node name="ControlUI" parent="ViewportContainer/Canvas" instance=ExtResource( 2 )]
+
+[node name="CanvasAnimacion" type="CanvasLayer" parent="ViewportContainer"]
+
+[node name="ControlEfectosEspeciales" type="Control" parent="ViewportContainer/CanvasAnimacion"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="ViewportContainer/CanvasAnimacion/ControlEfectosEspeciales"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 1, 0.027451, 0.027451, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayerEfectos" type="AnimationPlayer" parent="ViewportContainer/CanvasAnimacion/ControlEfectosEspeciales" groups=[
+"AnimationPlayerEfectos",
+]]
+anims/pantallaRoja = SubResource( 1 )
 [connection signal="timeout" from="TimerlevelStarDelay" to="GameManager" method="_on_TimerlevelStarDelay_timeout"]
+[connection signal="timeout" from="TimerReiniciarJuego" to="GameManager" method="_on_TimerReiniciarJuego_timeout"]

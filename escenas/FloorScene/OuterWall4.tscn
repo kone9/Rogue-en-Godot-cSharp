@@ -5,11 +5,11 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 15.9082, 15.8257 )
 
-[node name="OuterWall" type="Sprite"]
+[node name="OuterWall4" type="Sprite"]
 texture = ExtResource( 1 )
 vframes = 7
 hframes = 8
-frame = 25
+frame = 29
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." groups=[
 "OuterWall",

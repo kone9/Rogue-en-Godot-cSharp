@@ -31,7 +31,7 @@ public class Player : MovingObject
     public float restardLevelDelay = 1f;//segundos antes de reiniciar o pasar al siguente nivel
 
     private AnimationTree animator;//referencia al nodo animationthree
-    private int food;//para llevar la cuenta de cuanta comida tiene
+    public int food;//para llevar la cuenta de cuanta comida tiene
     private AnimationNodeStateMachinePlayback playback;//referencia al nodo animation tree con el parametro para acceder a los stados
 
     private SingletonVariables _SingletonVariables;
@@ -40,10 +40,13 @@ public class Player : MovingObject
     
     Wall hitWall;//referencia a la pared que esta chocando
 
+    
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        //OS.CurrentScreen = 1;//para iniciar el juego en otro monitor y poder trabajar con 2 monitores
+        
         movementSpeed = 1f / moveTime;//velocidad a la que se movera
         BoxCollider = GetNode<CollisionShape2D>("CollisionShape2D");
         rayo = GetNode<RayCast2D>("RayCast2D");//referencia al raycast
@@ -83,21 +86,23 @@ public class Player : MovingObject
 
     protected override bool AttempMove(int xDir, int yDir)//para mover el personaje
     {   
+        
         bool canMove = base.AttempMove(xDir,yDir);//ejecuto esta acción del metodo base y devuelve verdadero o falso
         if(canMove)//si puede moverse
         {
-             food --;//en cada paso dismunuje la comida
+            food --;//en cada paso dismunuje la comida
             _FoodText.Text = "food " + food;//comida del jugador
             _GameManager.RandomizeSfx(scavengers_footstep,scavengersFootstepNode);//en cada paso hay un sonido de caminar
         }
         CheckIfGameOver();//siempre que se decrementa la comida verificamos si es game over
         _GameManager.playersTurn = false;//luego terminamos el turno del jugador
+        
         return canMove;//regresa si se movio o no
     }
 
-    public override void _Input(InputEvent @event)
+    public override void _PhysicsProcess(float delta)//pruebo con la función que posee propiedades físicas
     {
-        //GD.Print(rayo.IsColliding());
+        
         if(!_GameManager.playersTurn || _GameManager.doingSetup)//si no es el turno del jugador o se esta inciando la escena con el menu
         {
             return;//dejamos de ejecutar y el personaje no se mueve
@@ -106,31 +111,6 @@ public class Player : MovingObject
         int horizontal = Convert.ToInt16((Input.GetActionStrength("d") - Input.GetActionStrength("a")) * dimensionSprite);//mover izquierda derecha
         int vertical =  Convert.ToInt16((Input.GetActionStrength("s") - Input.GetActionStrength("w")) * dimensionSprite );//mover arriba abajo
         
-        /*if(Input.IsActionJustPressed("a"))
-        {
-            horizontal = -32;
-        }
-
-        else if(Input.IsActionJustPressed("d"))
-        {
-            horizontal = 32;
-        }
-
-        else if(Input.IsActionJustPressed("s"))
-        {
-            vertical = 32;
-        }
-
-        else if(Input.IsActionJustPressed("w"))
-        {
-            vertical = -32;
-        }
-
-        else
-        {
-            horizontal =0;
-            vertical = 0;
-        }*/
 
         //posicionDelRayo = RaycastDirection(horizontal,vertical);
         if(horizontal != 0)//esto es para que NO se mueva en diagonal
@@ -143,8 +123,6 @@ public class Player : MovingObject
             //rayo.CastTo = RaycastDirection(horizontal,vertical);
             AttempMove(horizontal,vertical);//movemos el personaje
         }
-
-        
     }
 
 
@@ -152,6 +130,8 @@ public class Player : MovingObject
     {
         if(pared.IsInGroup("Wall"))//si esta en el grupo suelo
         {
+            food --;//en cada paso dismunuje la comida
+            _FoodText.Text = "food " + food;//comida del jugador es disminuida
             hitWall = (Wall)pared.GetParent();//con esto tendria que poder acceder al script que maneja ese piso para cambiar la figura al ser golpeado
         }
         if(hitWall != null)//si el personaje esta chocando con un muro
@@ -161,6 +141,13 @@ public class Player : MovingObject
             playback.Travel("PlayerChop");//activo animación romper pared
         }
     }
+    protected override void OncanMovePared()//si estoy contra la pared y quiero moverme en su dirección descuento 1 de comida
+    {
+        food --;//en cada paso dismunuje la comida
+        _FoodText.Text = "food " + food;//comida del jugador es disminuida
+        return;
+    }
+    
     protected override void OnCantMoveRigidBody2D(KinematicBody2D body2D)//si "NO" podemos movernos recibe el cuerpo rigido y es un character.Este es un metodo que se sobreescribe
     {
         //esta función es para detectar kinematic como el enemigo,pero el enemigo
@@ -204,7 +191,8 @@ public class Player : MovingObject
             food += pointPerFood;//sumo el puntaje de la comida
             _FoodText.Text = " + "+ pointPerFood +" food " + food;//comida del jugador
             (_area.GetParent().GetChild(0) as Area2D).Monitoring = false;//para que el cuerpo deje de ser detectado,porque aunque desaparesca el sprite sigue estando la colisión del area detectando cuerpos
-            (_area.GetParent() as Sprite).Visible = false;//hago invisible el nodo padre que contiene el sprite por lo tanto todos los hijos tendrian que ser inviisble
+            (_area.GetParent().GetChild(0) as Area2D).Monitoring = false;//para que el cuerpo deje de ser detectado,porque aunque desaparesca el sprite sigue estando la colisión del area detectando cuerpos
+            (_area.GetChild(1) as AnimationPlayer).Play("tomarAlimento");//busco el nodo hijo con indice 2 que es el animation player y activo la animación que hace desarparecer la soda
         }
         if(_area.IsInGroup("Soda"))
         {
@@ -212,7 +200,8 @@ public class Player : MovingObject
             food += pointPerSOda;//sumo el puntaje de la soda
             _FoodText.Text = " + "+ pointPerSOda +" food " + food;//comida del jugador
             (_area.GetParent().GetChild(0) as Area2D).Monitoring = false;//para que el cuerpo deje de ser detectado,porque aunque desaparesca el sprite sigue estando la colisión del area detectando cuerpos
-            (_area.GetParent() as Sprite).Visible = false;//hago invisible el nodo padre que contiene el sprite por lo tanto todos los hijos tendrian que ser inviisble
+            (_area.GetChild(1) as AnimationPlayer).Play("tomarAlimento");//busco el nodo hijo con indice 2 que es el animation player y activo la animación que hace desarparecer la soda
+
         }
     }
 
