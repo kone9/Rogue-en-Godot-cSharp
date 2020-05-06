@@ -11,7 +11,7 @@ https://kone9.itch.io/scavengers-2d-roguelike-en-godot-engine-c
 ![Alt Text](https://media.giphy.com/media/ReyeFuZSoyWrN4lXC9/source.gif)
 ![Alt Text](https://media.giphy.com/media/LpoRyhTr1Tjg1ZUPrp/source.gif)
 
-Algunas cosas del proyecto:
+# Algunas cosas del proyecto:
 Herencia,
 polimorfismo,
 clases abstractas,
@@ -33,7 +33,7 @@ Entre muchas cosas más..
 Todos los sprite y música son de la versión original de 2D Roguelike del tutorial de unity3D.
 https://learn.unity.com/project/2d-roguelike-tutorial
 
-REDES SOCIALES:
+# REDES SOCIALES:
 
 https://www.facebook.com/animador3dconblender/
 
