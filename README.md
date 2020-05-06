@@ -33,7 +33,7 @@ Entre muchas cosas más..
 Todos los sprite y música son de la versión original de 2D Roguelike del tutorial de unity3D.
 https://learn.unity.com/project/2d-roguelike-tutorial
 
-Buscame por:
+REDES SOCIALES:
 
 https://www.facebook.com/animador3dconblender/
 
