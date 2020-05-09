@@ -26,6 +26,7 @@ manejo de árboles de nodo para manejar escenas,
 casting de datos,
 timers,
 corrutinas,
+señales,
 Nodos control y manejo de interfaces,
 Implementación de logaritmos para aumentar la dificultad,
 Entre muchas cosas más..
