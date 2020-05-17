@@ -3,3 +3,4 @@
 /home/ariel/Documentos/Godot engine proyectos/GODOT C# PROYECTOS/Rogue en Godot/.mono/temp/obj/ExportRelease/Rogue en Godot.csprojAssemblyReference.cache
 /home/ariel/Documentos/Godot engine proyectos/GODOT C# PROYECTOS/Rogue en Godot/.mono/temp/obj/ExportRelease/Rogue en Godot.dll
 /home/ariel/Documentos/Godot engine proyectos/GODOT C# PROYECTOS/Rogue en Godot/.mono/temp/obj/ExportRelease/Rogue en Godot.pdb
+/home/ariel/Documentos/Godot engine proyectos/GODOT C# PROYECTOS/Rogue en Godot/.mono/temp/obj/ExportRelease/Rogue en Godot.csproj.CoreCompileInputs.cache

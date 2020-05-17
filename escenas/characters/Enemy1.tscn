@@ -62,7 +62,6 @@ graph_offset = Vector2( -9, 18.2934 )
 
 [node name="Enemy1" type="KinematicBody2D" groups=[
 "Enemy",
-"characters",
 ]]
 z_index = 2
 collision_layer = 3
@@ -78,7 +77,7 @@ shape = SubResource( 1 )
 texture = ExtResource( 1 )
 vframes = 7
 hframes = 8
-frame = 9
+frame = 10
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/EnemyAttack = SubResource( 2 )

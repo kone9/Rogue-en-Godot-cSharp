@@ -61,7 +61,6 @@ transitions = [ "EnemyIdle", "EnemyAttack", SubResource( 6 ), "EnemyAttack", "En
 
 [node name="Enemy2" type="KinematicBody2D" groups=[
 "Enemy",
-"characters",
 ]]
 z_index = 2
 collision_layer = 3
@@ -76,7 +75,7 @@ shape = SubResource( 1 )
 texture = ExtResource( 1 )
 vframes = 7
 hframes = 8
-frame = 12
+frame = 15
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/EnemyAttack = SubResource( 2 )
