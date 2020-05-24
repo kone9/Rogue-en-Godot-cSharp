@@ -1,5 +1,5 @@
 # Rogue-en-Godot-cSharp
-Siguendo un tutorial de unity en Godot Engine c# (versión 3.2.2 beta1)
+Siguendo un tutorial de unity en Godot Engine c# (versión 3.2.2 beta3)
 
 Prueba el juego en itchio.
 
