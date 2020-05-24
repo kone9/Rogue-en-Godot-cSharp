@@ -36,7 +36,7 @@ public abstract class MovingObject : KinematicBody2D//esta es una clase global q
     {
         moverConTween.InterpolateProperty(
             this,//que objeto quiero crear la interpolación osea este mismo
-            "Position",//que propiedad quiero interpolar,osea la posición
+            "position",//que propiedad quiero interpolar,osea la posición
             this.Position,//posición inicial
             end,//posicion final y multiplico por el tamaño del sprite,para esto tengo que hacer pruebas,pero creo que asi tendria que funcionar
             moveTime,//tiempo para ir de una posición a otra

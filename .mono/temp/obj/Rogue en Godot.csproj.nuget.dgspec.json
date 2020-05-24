@@ -1,0 +1,56 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/ariel/Documentos/Godot engine proyectos/GODOT C# PROYECTOS/Rogue en Godot/Rogue en Godot.csproj": {}
+  },
+  "projects": {
+    "/home/ariel/Documentos/Godot engine proyectos/GODOT C# PROYECTOS/Rogue en Godot/Rogue en Godot.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/ariel/Documentos/Godot engine proyectos/GODOT C# PROYECTOS/Rogue en Godot/Rogue en Godot.csproj",
+        "projectName": "Rogue en Godot",
+        "projectPath": "/home/ariel/Documentos/Godot engine proyectos/GODOT C# PROYECTOS/Rogue en Godot/Rogue en Godot.csproj",
+        "packagesPath": "/home/ariel/.nuget/packages/",
+        "outputPath": "/home/ariel/Documentos/Godot engine proyectos/GODOT C# PROYECTOS/Rogue en Godot/.mono/temp/obj/",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "configFilePaths": [
+          "/home/ariel/.config/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net47"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net47": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net47": {
+          "dependencies": {
+            "Microsoft.NETFramework.ReferenceAssemblies": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.0, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    }
+  }
+}

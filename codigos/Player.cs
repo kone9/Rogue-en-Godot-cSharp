@@ -111,6 +111,7 @@ public class Player : MovingObject
         int horizontal = Convert.ToInt16((Input.GetActionStrength("d") - Input.GetActionStrength("a")) * dimensionSprite);//mover izquierda derecha
         int vertical =  Convert.ToInt16((Input.GetActionStrength("s") - Input.GetActionStrength("w")) * dimensionSprite );//mover arriba abajo
         
+        
 
         //posicionDelRayo = RaycastDirection(horizontal,vertical);
         if(horizontal != 0)//esto es para que NO se mueva en diagonal

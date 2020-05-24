@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "MrTKDMxkMbdpIrybfmw0NhLw0sdmUdlYbcGMKUsvUrFUg2wCqivyr5rJ//OZ1wmZWnGA7ippodNCqHFCwz4wHg==",
+  "success": true,
+  "projectFilePath": "/home/ariel/Documentos/Godot engine proyectos/GODOT C# PROYECTOS/Rogue en Godot/Rogue en Godot.csproj",
+  "expectedPackageFiles": [
+    "/home/ariel/.nuget/packages/microsoft.netframework.referenceassemblies/1.0.0/microsoft.netframework.referenceassemblies.1.0.0.nupkg.sha512",
+    "/home/ariel/.nuget/packages/microsoft.netframework.referenceassemblies.net47/1.0.0/microsoft.netframework.referenceassemblies.net47.1.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
